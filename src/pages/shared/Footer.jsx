@@ -1,16 +1,25 @@
 import React from "react";
+import LogoHolder from "./LogoHolder";
 
 const Footer = () => {
   return (
-    <div>
-      <footer className="footer footer-horizontal footer-center bg-base-200 text-base-content rounded p-10">
-        <nav className="grid grid-flow-col gap-4">
-          <a className="link link-hover">About us</a>
-          <a className="link link-hover">Contact</a>
-          <a className="link link-hover">Jobs</a>
-          <a className="link link-hover">Press kit</a>
+    <div className="max-w-7xl mx-auto pb-10">
+      <footer className="footer footer-horizontal footer-center bg-gray-900 rounded-2xl p-10 mt-10">
+        <div className="text-white">
+           <LogoHolder></LogoHolder>
+           <p className="text-base max-w-2xl">Enjoy fast, reliable parcel delivery with real-time tracking and zero hassle. From personal packages to business shipments — we deliver on time, every time.</p>
+        </div>
+        
+
+        <nav className="grid grid-flow-col gap-4 text-gray-400">
+          <a className="link link-hover">Services</a>
+          <a className="link link-hover">Coverage</a>
+          <a className="link link-hover">About Us</a>
+          <a className="link link-hover">Pricing</a>
+          <a className="link link-hover">Blog</a>
+          <a className="link link-hover">Blog</a>
         </nav>
-        <nav>
+        <nav className="text-white">
           <div className="grid grid-flow-col gap-4">
             <a>
               <svg

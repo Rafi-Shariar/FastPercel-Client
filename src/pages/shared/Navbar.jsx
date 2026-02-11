@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router";
 import  LogoHolder from "../shared/LogoHolder";
+import { FiArrowUpRight } from "react-icons/fi";
 const Navbar = () => {
 
     const navItems = <>
@@ -48,7 +49,8 @@ const Navbar = () => {
         </div>
         <div className="navbar-end ">
           <a className="btn mr-4 rounded-xl">Sign in</a>
-          <a className="btn bg-brand rounded-xl">Be a rider</a>
+          <a className="btn bg-brand rounded-xl mr-2">Be a rider</a>
+          <a className="btn btn-circle bg-gray-800"><FiArrowUpRight className="text-2xl text-brand"/></a>
         </div>
       </div>
     </div>

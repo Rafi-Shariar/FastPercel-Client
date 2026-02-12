@@ -5,11 +5,11 @@ import { FiArrowUpRight } from "react-icons/fi";
 const Navbar = () => {
 
     const navItems = <>
-        <li><NavLink to="/services">Services</NavLink></li>
-        <li><NavLink to="/coverage">Coverage</NavLink></li>
-        <li><NavLink to="/about">About Us</NavLink></li>
-        <li><NavLink to="/pricing">Pricing</NavLink></li>
-        <li><NavLink to="/berider">Be a Rider</NavLink></li>
+        <li><NavLink to="/services" >Services</NavLink></li>
+        <li><NavLink to="/coverage" >Coverage</NavLink></li>
+        <li><NavLink to="/about" >About Us</NavLink></li>
+        <li><NavLink to="/pricing" >Pricing</NavLink></li>
+        <li><NavLink to="/berider" >Be a Rider</NavLink></li>
     </>
   return (
     <div className="pt-6">

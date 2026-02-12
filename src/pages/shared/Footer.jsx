@@ -7,7 +7,7 @@ const Footer = () => {
       <footer className="footer footer-horizontal footer-center bg-gray-900 rounded-2xl p-10 mt-10">
         <div className="text-white">
            <LogoHolder></LogoHolder>
-           <p className="text-base max-w-2xl">Enjoy fast, reliable parcel delivery with real-time tracking and zero hassle. From personal packages to business shipments — we deliver on time, every time.</p>
+           <p className="text-base max-w-2xl text-gray-500">Enjoy fast, reliable parcel delivery with real-time tracking and zero hassle. From personal packages to business shipments — we deliver on time, every time.</p>
         </div>
         
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-const Login = () => {
+const Register = () => {
   const { register, handleSubmit, formState:{errors} } = useForm();
 
   const onSubmit = (data) => console.log('test',data);
@@ -9,17 +9,27 @@ const Login = () => {
   return (
     <div>
       <div>
-        <h1 className="text-4xl font-semibold">Welcome Back</h1>
-        <p>Login with Profast</p>
+        <h1 className="text-4xl font-semibold">Create An Account</h1>
+        <p>Register with Profast</p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-6">
         <fieldset className="fieldset">
+
+          <label className="label">Name</label>
+          <input
+            type="text"
+            className="input w-full"
+            placeholder="Name"
+            {...register("name", {required:true})}
+          />
+
+
           <label className="label">Email</label>
           <input
             type="email"
             className="input w-full"
             placeholder="Email"
-            {...register("email")}
+            {...register("email", {required:true})}
           />
 
           <label className="label">Password</label>
@@ -36,13 +46,11 @@ const Login = () => {
             errors.password?.type === 'minLength' && <p className="text-red-500"> Password must be 6 characters</p>
           }
 
-          <div>
-            <a className="link link-hover">Forgot password?</a>
-          </div>
+          
 
-          <button className="btn mt-4 bg-brand text-black">Login</button>
+          <button className="btn mt-4 bg-brand text-black">Register</button>
 
-          <p className="text-base">Don't have an account? <a href="./register" className="font-bold text-brand">Register</a></p>
+          <p className="text-base">Don't have an account? <span className="font-bold text-brand"><a href="./login">Login</a></span></p>
           <p className="text-center">Or</p>
           <button className="btn bg-white text-black border-[#e5e5e5]">
             <svg
@@ -80,4 +88,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

@@ -1,10 +1,25 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import useAuth from "../../../hooks/useAuth";
+import { log } from "firebase/firestore/pipelines";
 
 const Register = () => {
-  const { register, handleSubmit, formState:{errors} } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { createUser } = useAuth();
 
-  const onSubmit = (data) => console.log('test',data);
+  const onSubmit = (data) => {
+    createUser(data.email, data.password)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <div>
@@ -14,22 +29,20 @@ const Register = () => {
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-6">
         <fieldset className="fieldset">
-
           <label className="label">Name</label>
           <input
             type="text"
             className="input w-full"
             placeholder="Name"
-            {...register("name", {required:true})}
+            {...register("name", { required: true })}
           />
-
 
           <label className="label">Email</label>
           <input
             type="email"
             className="input w-full"
             placeholder="Email"
-            {...register("email", {required:true})}
+            {...register("email", { required: true })}
           />
 
           <label className="label">Password</label>
@@ -37,20 +50,23 @@ const Register = () => {
             type="password"
             className="input w-full"
             placeholder="Password"
-            {...register("password", {required:true, minLength:6})}
+            {...register("password", { required: true, minLength: 6 })}
           />
-          {
-            errors.password?.type === 'required' && <p className="text-red-500"> Password is required</p>
-          }
-          {
-            errors.password?.type === 'minLength' && <p className="text-red-500"> Password must be 6 characters</p>
-          }
-
-          
+          {errors.password?.type === "required" && (
+            <p className="text-red-500"> Password is required</p>
+          )}
+          {errors.password?.type === "minLength" && (
+            <p className="text-red-500"> Password must be 6 characters</p>
+          )}
 
           <button className="btn mt-4 bg-brand text-black">Register</button>
 
-          <p className="text-base">Don't have an account? <span className="font-bold text-brand"><a href="./login">Login</a></span></p>
+          <p className="text-base">
+            Don't have an account?{" "}
+            <span className="font-bold text-brand">
+              <a href="./login">Login</a>
+            </span>
+          </p>
           <p className="text-center">Or</p>
           <button className="btn bg-white text-black border-[#e5e5e5]">
             <svg

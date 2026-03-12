@@ -7,7 +7,7 @@ const Navbar = () => {
     const navItems = <>
         <li><NavLink to="/services" >Services</NavLink></li>
         <li><NavLink to="/coverage" >Coverage</NavLink></li>
-        <li><NavLink to="/about" >About Us</NavLink></li>
+        <li><NavLink to="/sendParcel" >Send Parcel</NavLink></li>
         <li><NavLink to="/pricing" >Pricing</NavLink></li>
         <li><NavLink to="/berider" >Be a Rider</NavLink></li>
     </>
@@ -48,7 +48,7 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="navbar-end ">
-          <a className="btn mr-4 rounded-xl">Sign in</a>
+          <a href="/login" className="btn mr-4 rounded-xl">Sign in</a>
           <a className="btn bg-brand rounded-xl mr-2">Be a rider</a>
           <a className="btn btn-circle bg-gray-800"><FiArrowUpRight className="text-2xl text-brand"/></a>
         </div>

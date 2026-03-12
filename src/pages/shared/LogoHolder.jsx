@@ -1,7 +1,9 @@
 import React from 'react';
 import logo from '../../assets/logo.png';
+import { Link } from 'react-router';
 const LogoHolder = () => {
     return (
+        <Link to={'/'}>
         <div className='flex'>
             <div>
                 <img src={logo} alt=""/>
@@ -11,6 +13,7 @@ const LogoHolder = () => {
             </section>
             
         </div>
+        </Link>
     );
 };
 

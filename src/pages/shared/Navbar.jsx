@@ -2,7 +2,9 @@ import React from "react";
 import { NavLink } from "react-router";
 import  LogoHolder from "../shared/LogoHolder";
 import { FiArrowUpRight } from "react-icons/fi";
+import useAuth from "../../hooks/useAuth";
 const Navbar = () => {
+  const {user} = useAuth();
 
     const navItems = <>
         <li><NavLink to="/services" >Services</NavLink></li>
@@ -10,6 +12,12 @@ const Navbar = () => {
         <li><NavLink to="/sendParcel" >Send Parcel</NavLink></li>
         <li><NavLink to="/pricing" >Pricing</NavLink></li>
         <li><NavLink to="/berider" >Be a Rider</NavLink></li>
+        {
+          user && 
+          <>
+          <li><NavLink to="/dashboard" >Dashboard</NavLink></li>
+          </>
+        }
     </>
   return (
     <div className="pt-6">

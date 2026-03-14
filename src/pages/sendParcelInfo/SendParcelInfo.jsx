@@ -3,14 +3,13 @@ import { useForm, useWatch } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useLoaderData } from "react-router";
 import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const SendParcelInfo = () => {
-
   const user = useAuth();
   const userEmail = user?.user.email;
+  const axiosSecure = useAxiosSecure();
 
-  
-  
   // Initialize React Hook Form
   const {
     register,
@@ -21,38 +20,38 @@ const SendParcelInfo = () => {
 
   //Divisons
   const serviceCenters = useLoaderData();
-  const regionDuplicate = serviceCenters.map(c => c.region);
+  const regionDuplicate = serviceCenters.map((c) => c.region);
   const regions = [...new Set(regionDuplicate)];
 
-  const senderRegion = useWatch({control, name:'senderRegion'})
-  const recieverRegion = useWatch({control, name:'receiverRegion'})
+  const senderRegion = useWatch({ control, name: "senderRegion" });
+  const recieverRegion = useWatch({ control, name: "receiverRegion" });
 
   const districtsByRegion = (region) => {
-    const regionDistricts = serviceCenters.filter(c => c.region === region);
-    const districts = regionDistricts.map(d => d.district);
-    
+    const regionDistricts = serviceCenters.filter((c) => c.region === region);
+    const districts = regionDistricts.map((d) => d.district);
+
     return districts;
-  }
-  
-  
+  };
 
   // Mock Submit Function
   const onSubmit = (data) => {
-
-
     const parcelData = { ...data, senderEmail: userEmail };
-  
-    
-
-    toast.success("Parcel details added successfully!", {
-      duration: 4000,
-      position: "top-right",
-      style: {
-        background: "#003d32",
-        color: "#fff",
-      },
+    axiosSecure.post("/addpercel", parcelData).then((res) => {
+      // console.log(res.data);
+      if (res.data.insertedId) {
+        toast.success("Parcel details added successfully!", {
+          duration: 4000,
+          position: "top-right",
+          style: {
+            background: "#003d32",
+            color: "#fff",
+          },
+        });
+      }
+      else{
+        toast.error("Error Occured! Try again.")
+      }
     });
-    
   };
 
   return (
@@ -91,17 +90,27 @@ const SendParcelInfo = () => {
         {/* Top Row: Parcel Name & Weight */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="form-control">
-            <label className="label font-semibold pb-1 text-xs uppercase opacity-70">Parcel Name</label>
+            <label className="label font-semibold pb-1 text-xs uppercase opacity-70">
+              Parcel Name
+            </label>
             <input
-              {...register("parcelName", { required: "Parcel name is required" })}
+              {...register("parcelName", {
+                required: "Parcel name is required",
+              })}
               type="text"
               placeholder="Parcel Name"
-              className={`input input-bordered w-full ${errors.parcelName ? 'border-red-500' : ''}`}
+              className={`input input-bordered w-full ${errors.parcelName ? "border-red-500" : ""}`}
             />
-            {errors.parcelName && <span className="text-red-500 text-xs mt-1">{errors.parcelName.message}</span>}
+            {errors.parcelName && (
+              <span className="text-red-500 text-xs mt-1">
+                {errors.parcelName.message}
+              </span>
+            )}
           </div>
           <div className="form-control">
-            <label className="label font-semibold pb-1 text-xs uppercase opacity-70">Parcel Weight (KG)</label>
+            <label className="label font-semibold pb-1 text-xs uppercase opacity-70">
+              Parcel Weight (KG)
+            </label>
             <input
               {...register("parcelWeight", { required: true })}
               type="number"
@@ -116,86 +125,174 @@ const SendParcelInfo = () => {
 
         {/* Sender and Receiver Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          
           {/* Left Side: Sender Details */}
           <div className="space-y-4">
-            <h2 className="text-lg font-bold mb-4 border-b pb-2">Sender Details</h2>
+            <h2 className="text-lg font-bold mb-4 border-b pb-2">
+              Sender Details
+            </h2>
             <div className="grid grid-cols-2 gap-4">
               <div className="form-control">
-                <label className="label text-xs font-semibold uppercase">Sender Name</label>
-                <input {...register("senderName")} type="text" placeholder="Sender Name" className="input input-bordered w-full" />
+                <label className="label text-xs font-semibold uppercase">
+                  Sender Name
+                </label>
+                <input
+                  {...register("senderName")}
+                  type="text"
+                  placeholder="Sender Name"
+                  className="input input-bordered w-full"
+                />
               </div>
               <div className="form-control">
-                <label className="label text-xs font-semibold uppercase">Region</label>
-                <select {...register("senderRegion")} defaultValue="Select Region"  className="select select-bordered w-full font-normal">
-                  {
-                    regions.map((r,i) => <option key={i} value={r} >{r}</option>)
-                  }
+                <label className="label text-xs font-semibold uppercase">
+                  Region
+                </label>
+                <select
+                  {...register("senderRegion")}
+                  defaultValue="Select Region"
+                  className="select select-bordered w-full font-normal"
+                >
+                  {regions.map((r, i) => (
+                    <option key={i} value={r}>
+                      {r}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="form-control">
-                <label className="label text-xs font-semibold uppercase">Address</label>
-                <input {...register("senderAddress")} type="text" placeholder="Address" className="input input-bordered w-full" />
+                <label className="label text-xs font-semibold uppercase">
+                  Address
+                </label>
+                <input
+                  {...register("senderAddress")}
+                  type="text"
+                  placeholder="Address"
+                  className="input input-bordered w-full"
+                />
               </div>
               <div className="form-control">
-                <label className="label text-xs font-semibold uppercase">Sender Contact No</label>
-                <input {...register("senderPhone")} type="text" placeholder="Sender Contact" className="input input-bordered w-full" />
+                <label className="label text-xs font-semibold uppercase">
+                  Sender Contact No
+                </label>
+                <input
+                  {...register("senderPhone")}
+                  type="text"
+                  placeholder="Sender Contact"
+                  className="input input-bordered w-full"
+                />
               </div>
             </div>
             <div className="form-control">
-              <label className="label text-xs font-semibold uppercase">Pickup Warehouse</label>
-              <select {...register("senderWarehouse")} className="select select-bordered w-full font-normal">
-                {
-                  districtsByRegion(senderRegion).map((r,i)=> <option key={i} value={r}>{r}</option>)
-                }
+              <label className="label text-xs font-semibold uppercase">
+                Pickup Warehouse
+              </label>
+              <select
+                {...register("senderWarehouse")}
+                className="select select-bordered w-full font-normal"
+              >
+                {districtsByRegion(senderRegion).map((r, i) => (
+                  <option key={i} value={r}>
+                    {r}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="form-control flex flex-col">
-              <label className="label text-xs font-semibold uppercase">Pickup Instruction</label>
-              <textarea {...register("pickupNote")} className="w-full textarea textarea-bordered h-24" placeholder="Instruction..."></textarea>
+              <label className="label text-xs font-semibold uppercase">
+                Pickup Instruction
+              </label>
+              <textarea
+                {...register("pickupNote")}
+                className="w-full textarea textarea-bordered h-24"
+                placeholder="Instruction..."
+              ></textarea>
             </div>
           </div>
 
           {/* Right Side: Receiver Details */}
           <div className="space-y-4">
-            <h2 className="text-lg font-bold mb-4 border-b pb-2">Receiver's Details</h2>
+            <h2 className="text-lg font-bold mb-4 border-b pb-2">
+              Receiver's Details
+            </h2>
             <div className="grid grid-cols-2 gap-4">
               <div className="form-control">
-                <label className="label text-xs font-semibold uppercase">Receiver Name</label>
-                <input {...register("receiverName")} type="text" placeholder="Receiver Name" className="input input-bordered w-full" />
+                <label className="label text-xs font-semibold uppercase">
+                  Receiver Name
+                </label>
+                <input
+                  {...register("receiverName")}
+                  type="text"
+                  placeholder="Receiver Name"
+                  className="input input-bordered w-full"
+                />
               </div>
               <div className="form-control">
-                <label className="label text-xs font-semibold uppercase">Delivery Region</label>
-                <select {...register("receiverRegion")} defaultValue="Pick a region" className="select select-bordered w-full font-normal">
-                   {
-                    regions.map((r,i) => <option key={i} value={r} >{r}</option>)
-                  }
+                <label className="label text-xs font-semibold uppercase">
+                  Delivery Region
+                </label>
+                <select
+                  {...register("receiverRegion")}
+                  defaultValue="Pick a region"
+                  className="select select-bordered w-full font-normal"
+                >
+                  {regions.map((r, i) => (
+                    <option key={i} value={r}>
+                      {r}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="form-control">
-                <label className="label text-xs font-semibold uppercase">Receiver Address</label>
-                <input {...register("receiverAddress")} type="text" placeholder="Address" className="input input-bordered w-full" />
+                <label className="label text-xs font-semibold uppercase">
+                  Receiver Address
+                </label>
+                <input
+                  {...register("receiverAddress")}
+                  type="text"
+                  placeholder="Address"
+                  className="input input-bordered w-full"
+                />
               </div>
               <div className="form-control">
-                <label className="label text-xs font-semibold uppercase">Receiver Contact No</label>
-                <input {...register("receiverPhone")} type="text" placeholder="Contact No" className="input input-bordered w-full" />
+                <label className="label text-xs font-semibold uppercase">
+                  Receiver Contact No
+                </label>
+                <input
+                  {...register("receiverPhone")}
+                  type="text"
+                  placeholder="Contact No"
+                  className="input input-bordered w-full"
+                />
               </div>
             </div>
             <div className="form-control">
-              <label className="label text-xs font-semibold uppercase">Receiver Warehouse</label>
-              <select {...register("receiverWarehouse")} defaultValue="pick a ware house" className="select select-bordered w-full font-normal">
-                 {
-                  districtsByRegion(recieverRegion).map((r,i)=> <option key={i} value={r}>{r}</option>)
-                }
+              <label className="label text-xs font-semibold uppercase">
+                Receiver Warehouse
+              </label>
+              <select
+                {...register("receiverWarehouse")}
+                defaultValue="pick a ware house"
+                className="select select-bordered w-full font-normal"
+              >
+                {districtsByRegion(recieverRegion).map((r, i) => (
+                  <option key={i} value={r}>
+                    {r}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="form-control flex flex-col">
-              <label className="label text-xs font-semibold uppercase">Delivery Instruction</label>
-              <textarea {...register("deliveryNote")} className="w-full textarea textarea-bordered h-24" placeholder="Instruction..."></textarea>
+              <label className="label text-xs font-semibold uppercase">
+                Delivery Instruction
+              </label>
+              <textarea
+                {...register("deliveryNote")}
+                className="w-full textarea textarea-bordered h-24"
+                placeholder="Instruction..."
+              ></textarea>
             </div>
           </div>
         </div>

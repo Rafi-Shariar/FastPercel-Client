@@ -16,7 +16,7 @@ export const router = createBrowserRouter([
     children:[
         { index: true, Component: Home},
         { path:'/coverage', Component:Coverage, loader: () => fetch('../../data/warehouses.json')},
-        { path: '/sendParcel', element:<PrivateRoute><SendParcelInfo></SendParcelInfo></PrivateRoute>}
+        { path: '/sendParcel', element:<PrivateRoute><SendParcelInfo></SendParcelInfo></PrivateRoute>, loader: ()=> fetch('../../data/warehouses.json')}
     ]
   },
   {

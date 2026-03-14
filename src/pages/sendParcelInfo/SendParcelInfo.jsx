@@ -1,19 +1,49 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
+import { useLoaderData } from "react-router";
+import useAuth from "../../hooks/useAuth";
 
 const SendParcelInfo = () => {
+
+  const user = useAuth();
+  const userEmail = user?.user.email;
+
+  
+  
   // Initialize React Hook Form
   const {
     register,
     handleSubmit,
-    reset,
+    control,
     formState: { errors },
   } = useForm();
 
+  //Divisons
+  const serviceCenters = useLoaderData();
+  const regionDuplicate = serviceCenters.map(c => c.region);
+  const regions = [...new Set(regionDuplicate)];
+
+  const senderRegion = useWatch({control, name:'senderRegion'})
+  const recieverRegion = useWatch({control, name:'receiverRegion'})
+
+  const districtsByRegion = (region) => {
+    const regionDistricts = serviceCenters.filter(c => c.region === region);
+    const districts = regionDistricts.map(d => d.district);
+    
+    return districts;
+  }
+  
+  
+
   // Mock Submit Function
   const onSubmit = (data) => {
-    console.log("Form Data:", data);
+
+
+    const parcelData = { ...data, senderEmail: userEmail };
+  
+    
+
     toast.success("Parcel details added successfully!", {
       duration: 4000,
       position: "top-right",
@@ -22,7 +52,7 @@ const SendParcelInfo = () => {
         color: "#fff",
       },
     });
-    // Optional: reset() after success
+    
   };
 
   return (
@@ -96,10 +126,11 @@ const SendParcelInfo = () => {
                 <input {...register("senderName")} type="text" placeholder="Sender Name" className="input input-bordered w-full" />
               </div>
               <div className="form-control">
-                <label className="label text-xs font-semibold uppercase">Pickup Warehouse</label>
-                <select {...register("senderWarehouse")} className="select select-bordered w-full font-normal">
-                  <option value="">Select Warehouse</option>
-                  <option value="main">Main Warehouse</option>
+                <label className="label text-xs font-semibold uppercase">Region</label>
+                <select {...register("senderRegion")} defaultValue="Select Region"  className="select select-bordered w-full font-normal">
+                  {
+                    regions.map((r,i) => <option key={i} value={r} >{r}</option>)
+                  }
                 </select>
               </div>
             </div>
@@ -114,10 +145,11 @@ const SendParcelInfo = () => {
               </div>
             </div>
             <div className="form-control">
-              <label className="label text-xs font-semibold uppercase">Your Region</label>
-              <select {...register("senderRegion")} className="select select-bordered w-full font-normal">
-                <option value="">Select your region</option>
-                <option value="north">North Region</option>
+              <label className="label text-xs font-semibold uppercase">Pickup Warehouse</label>
+              <select {...register("senderWarehouse")} className="select select-bordered w-full font-normal">
+                {
+                  districtsByRegion(senderRegion).map((r,i)=> <option key={i} value={r}>{r}</option>)
+                }
               </select>
             </div>
             <div className="form-control flex flex-col">
@@ -135,9 +167,11 @@ const SendParcelInfo = () => {
                 <input {...register("receiverName")} type="text" placeholder="Receiver Name" className="input input-bordered w-full" />
               </div>
               <div className="form-control">
-                <label className="label text-xs font-semibold uppercase">Delivery Warehouse</label>
-                <select {...register("receiverWarehouse")} className="select select-bordered w-full font-normal">
-                  <option value="">Select Warehouse</option>
+                <label className="label text-xs font-semibold uppercase">Delivery Region</label>
+                <select {...register("receiverRegion")} defaultValue="Pick a region" className="select select-bordered w-full font-normal">
+                   {
+                    regions.map((r,i) => <option key={i} value={r} >{r}</option>)
+                  }
                 </select>
               </div>
             </div>
@@ -152,9 +186,11 @@ const SendParcelInfo = () => {
               </div>
             </div>
             <div className="form-control">
-              <label className="label text-xs font-semibold uppercase">Receiver Region</label>
-              <select {...register("receiverRegion")} className="select select-bordered w-full font-normal">
-                <option value="">Select region</option>
+              <label className="label text-xs font-semibold uppercase">Receiver Warehouse</label>
+              <select {...register("receiverWarehouse")} defaultValue="pick a ware house" className="select select-bordered w-full font-normal">
+                 {
+                  districtsByRegion(recieverRegion).map((r,i)=> <option key={i} value={r}>{r}</option>)
+                }
               </select>
             </div>
             <div className="form-control flex flex-col">

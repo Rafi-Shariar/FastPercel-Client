@@ -8,6 +8,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 const SendParcelInfo = () => {
   const user = useAuth();
   const userEmail = user?.user.email;
+  const payment_status = 'unpaid';
   const axiosSecure = useAxiosSecure();
 
   // Initialize React Hook Form
@@ -33,9 +34,11 @@ const SendParcelInfo = () => {
     return districts;
   };
 
+
+
   // Mock Submit Function
   const onSubmit = (data) => {
-    const parcelData = { ...data, senderEmail: userEmail };
+    const parcelData = { ...data, senderEmail: userEmail, payment_status };
     axiosSecure.post("/addpercel", parcelData).then((res) => {
       // console.log(res.data);
       if (res.data.insertedId) {

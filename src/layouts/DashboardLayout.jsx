@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Outlet } from "react-router";
+import LogoHolder from "../pages/shared/LogoHolder";
 
 const DashboardLayout = () => {
 
@@ -18,6 +19,15 @@ const DashboardLayout = () => {
           <li>
             <Link to="/dashboard/myparcels" className="hover:bg-white/10">
               My Parcels
+            </Link>
+          </li>
+
+           <div className="divider divider-neutral"></div>
+          
+          {/* Standard Navigation */}
+          <li>
+            <Link to="/" className="hover:bg-white/10">
+              Home
             </Link>
           </li>
   
@@ -52,7 +62,7 @@ const DashboardLayout = () => {
             </label>
           </div>
           <div className="flex-1 px-2 font-bold text-xl text-[#003d32]">
-            Dashboard
+            <LogoHolder></LogoHolder>
           </div>
         </div>
 
@@ -80,16 +90,7 @@ const DashboardLayout = () => {
             links
           }
           
-          
-          
-          <div className="divider divider-neutral"></div>
-          
-          {/* Standard Navigation */}
-          <li>
-            <Link to="/" className="hover:bg-white/10">
-              Home
-            </Link>
-          </li>
+         
         </ul>
       </div>
     </div>

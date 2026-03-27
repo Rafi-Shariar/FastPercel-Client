@@ -7,7 +7,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const SendParcelInfo = () => {
   const user = useAuth();
-  const userEmail = user?.user.email;
+  const userEmail = user?.user?.email;
   const payment_status = 'unpaid';
   const axiosSecure = useAxiosSecure();
 

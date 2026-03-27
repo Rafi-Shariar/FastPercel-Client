@@ -4,7 +4,7 @@ import  LogoHolder from "../shared/LogoHolder";
 import { FiArrowUpRight } from "react-icons/fi";
 import useAuth from "../../hooks/useAuth";
 const Navbar = () => {
-  const {user} = useAuth();
+  const {user,logOut} = useAuth();
 
     const navItems = <>
         <li><NavLink to="/services" >Services</NavLink></li>
@@ -19,6 +19,18 @@ const Navbar = () => {
           </>
         }
     </>
+
+    //Logout handler
+    const handleLogOut = () => {
+      logOut()
+      .then(result =>{
+        console.log(result);
+      })
+      .catch(error => {
+        console.error(error);
+        
+      })
+    }
   return (
     <div className="pt-6">
       <div className="navbar max-w-7xl bg-white mx-auto rounded-xl mb-10 px-6 py-3">
@@ -56,7 +68,10 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="navbar-end ">
-          <a href="/login" className="btn mr-4 rounded-xl">Sign in</a>
+          {
+            user ? <><button onClick={handleLogOut} className="btn mr-4 rounded-xl">Sign Out</button></> : <><a href="/login" className="btn mr-4 rounded-xl">Sign in</a></>
+          }
+          
           <a className="btn bg-brand rounded-xl mr-2">Be a rider</a>
           <a className="btn btn-circle bg-gray-800"><FiArrowUpRight className="text-2xl text-brand"/></a>
         </div>

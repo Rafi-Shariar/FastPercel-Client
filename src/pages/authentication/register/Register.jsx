@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../socialLogin/SocialLogin";
 import axios from "axios";
+import userAxios from "../../../hooks/useAxios";
+import useAxios from "../../../hooks/useAxios";
 
 const Register = () => {
   const [profilePic, setProfilePic] = useState('');
@@ -14,12 +16,26 @@ const Register = () => {
   } = useForm();
 
   const { createUser,updateUserProfile } = useAuth();
+  const axiosInstance = useAxios();
 
   const onSubmit = (data) => {
     createUser(data.email, data.password)
-      .then((result) => {
+      .then(async (result) => {
         console.log(result);
 
+        //user details in firebase
+        const userInfo = {
+          email: data.email,
+          role: 'user',
+          created_at: new Date().toISOString()
+        }
+
+        const userRes = await axiosInstance.post('/users', userInfo);
+        console.log(userRes);
+        
+       
+
+        //update profilePic & name in firebase
         const userProfile = {
           displayName : data.name,
           photoURL : profilePic

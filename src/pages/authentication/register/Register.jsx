@@ -1,25 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../socialLogin/SocialLogin";
+import axios from "axios";
 
 const Register = () => {
+  const [profilePic, setProfilePic] = useState('');
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { createUser } = useAuth();
+
+  const { createUser,updateUserProfile } = useAuth();
 
   const onSubmit = (data) => {
     createUser(data.email, data.password)
       .then((result) => {
         console.log(result);
+
+        const userProfile = {
+          displayName : data.name,
+          photoURL : profilePic
+        }
+        updateUserProfile(userProfile)
+        .then(()=>{
+          console.log('profile name & pic updated');
+          
+        })
+        .catch(error => {
+          console.error(error);
+          
+        })
       })
       .catch((error) => {
         console.error(error);
       });
   };
+
+  const handleImageUpload =async (e) =>{
+    const image = e.target.files[0];
+    const formData = new FormData();
+    formData.append('image',image)
+
+    const imageUploadURL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_upload_key}`;
+    const res = await axios.post(imageUploadURL,formData)
+    const imageURL = res.data.data.url;
+    setProfilePic(imageURL);
+
+  }
 
   return (
     <div>
@@ -29,6 +59,15 @@ const Register = () => {
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-6">
         <fieldset className="fieldset">
+          <label className="label">Photo</label>
+          <input
+            type="file"
+            onChange={handleImageUpload}
+            className="file-input"
+            placeholder="Your Profile Picture"
+          />
+
+
           <label className="label">Name</label>
           <input
             type="text"

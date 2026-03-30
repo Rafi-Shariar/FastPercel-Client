@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../socialLogin/SocialLogin";
 import axios from "axios";
-import userAxios from "../../../hooks/useAxios";
 import useAxios from "../../../hooks/useAxios";
 
 const Register = () => {

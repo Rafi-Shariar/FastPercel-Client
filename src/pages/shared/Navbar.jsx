@@ -1,36 +1,49 @@
 import React from "react";
 import { NavLink } from "react-router";
-import  LogoHolder from "../shared/LogoHolder";
+import LogoHolder from "../shared/LogoHolder";
 import { FiArrowUpRight } from "react-icons/fi";
 import useAuth from "../../hooks/useAuth";
 const Navbar = () => {
-  const {user,logOut} = useAuth();
+  const { user, logOut } = useAuth();
+  console.log(user);
 
-    const navItems = <>
-        <li><NavLink to="/services" >Services</NavLink></li>
-        <li><NavLink to="/coverage" >Coverage</NavLink></li>
-        <li><NavLink to="/sendParcel" >Send Parcel</NavLink></li>
-        <li><NavLink to="/pricing" >Pricing</NavLink></li>
-        <li><NavLink to="/berider" >Be a Rider</NavLink></li>
-        {
-          user && 
-          <>
-          <li><NavLink to="/dashboard" >Dashboard</NavLink></li>
-          </>
-        }
+  const navItems = (
+    <>
+      <li>
+        <NavLink to="/services">Services</NavLink>
+      </li>
+      <li>
+        <NavLink to="/coverage">Coverage</NavLink>
+      </li>
+      <li>
+        <NavLink to="/sendParcel">Send Parcel</NavLink>
+      </li>
+      <li>
+        <NavLink to="/pricing">Pricing</NavLink>
+      </li>
+      <li>
+        <NavLink to="/berider">Be a Rider</NavLink>
+      </li>
+      {user && (
+        <>
+          <li>
+            <NavLink to="/dashboard">Dashboard</NavLink>
+          </li>
+        </>
+      )}
     </>
+  );
 
-    //Logout handler
-    const handleLogOut = () => {
-      logOut()
-      .then(result =>{
+  //Logout handler
+  const handleLogOut = () => {
+    logOut()
+      .then((result) => {
         console.log(result);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
-        
-      })
-    }
+      });
+  };
   return (
     <div className="pt-6">
       <div className="navbar max-w-7xl bg-white mx-auto rounded-xl mb-10 px-6 py-3">
@@ -57,10 +70,10 @@ const Navbar = () => {
               tabIndex="-1"
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
-             {navItems}
+              {navItems}
             </ul>
           </div>
-           <LogoHolder></LogoHolder>
+          <LogoHolder></LogoHolder>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 text-base text-gray-600">
@@ -68,12 +81,25 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="navbar-end ">
-          {
-            user ? <><button onClick={handleLogOut} className="btn mr-4 rounded-xl">Sign Out</button></> : <><a href="/login" className="btn mr-4 rounded-xl">Sign in</a></>
-          }
-          
           <a className="btn bg-brand rounded-xl mr-2">Be a rider</a>
-          <a className="btn btn-circle bg-gray-800"><FiArrowUpRight className="text-2xl text-brand"/></a>
+          {user ? (
+            <>
+              <button onClick={handleLogOut} className="btn mr-4 rounded-xl">
+                Sign Out
+              </button>{" "}
+              <div className="avatar">
+                <div className="ring-primary ring-offset-base-100 w-10 rounded-full ring-2 ring-offset-2">
+                  <img src={user?.photoURL} />
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <a href="/login" className="btn mr-4 rounded-xl">
+                Sign in
+              </a>
+            </>
+          )}
         </div>
       </div>
     </div>

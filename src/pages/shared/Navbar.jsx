@@ -5,7 +5,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 import useAuth from "../../hooks/useAuth";
 const Navbar = () => {
   const { user, logOut } = useAuth();
-  console.log(user);
+  
 
   const navItems = (
     <>
@@ -87,7 +87,7 @@ const Navbar = () => {
               </button>{" "}
               <div className="avatar">
                 <div className="ring-primary ring-offset-base-100 w-10 rounded-full ring-2 ring-offset-2">
-                  <img src={user?.photoURL} />
+                  <img src={user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=fallback"} referrerPolicy="no-referrer"/>
                 </div>
               </div>
             </>

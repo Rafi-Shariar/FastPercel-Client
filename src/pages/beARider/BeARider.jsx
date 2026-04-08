@@ -8,7 +8,6 @@ import toast, { Toaster } from "react-hot-toast";
 const BeARider = () => {
   const axiosSecure = useAxiosSecure();
   const user = useAuth();
-  console.log(user);
   
 
   //React Hook Form

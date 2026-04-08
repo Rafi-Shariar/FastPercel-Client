@@ -9,6 +9,7 @@ import PrivateRoute from "../routes/PrivateRoute";
 import SendParcelInfo from "../pages/sendParcelInfo/SendParcelInfo";
 import DashboardLayout from "../layouts/DashboardLayout";
 import MyParcels from "../pages/dashboard/myParcels/MyParcels";
+import BeARider from "../pages/beARider/BeARider";
 
 
 export const router = createBrowserRouter([
@@ -18,7 +19,8 @@ export const router = createBrowserRouter([
     children:[
         { index: true, Component: Home},
         { path:'/coverage', Component:Coverage, loader: () => fetch('../../data/warehouses.json')},
-        { path: '/sendParcel', element:<PrivateRoute><SendParcelInfo></SendParcelInfo></PrivateRoute>, loader: ()=> fetch('../../data/warehouses.json')}
+        { path: '/sendParcel', element:<PrivateRoute><SendParcelInfo></SendParcelInfo></PrivateRoute>, loader: ()=> fetch('../../data/warehouses.json')},
+        { path: '/berider', element: <BeARider></BeARider>}
     ]
   },
   {

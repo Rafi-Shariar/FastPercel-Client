@@ -21,9 +21,7 @@ const Navbar = () => {
       <li>
         <NavLink to="/pricing">Pricing</NavLink>
       </li>
-      <li>
-        <NavLink to="/berider">Be a Rider</NavLink>
-      </li>
+      
       {user && (
         <>
           <li>
@@ -81,7 +79,7 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="navbar-end ">
-          <a className="btn bg-brand rounded-xl mr-2">Be a rider</a>
+          <a href="/berider" className="btn bg-brand rounded-xl mr-2">Be a rider</a>
           {user ? (
             <>
               <button onClick={handleLogOut} className="btn mr-4 rounded-xl">

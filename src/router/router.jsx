@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
         { index: true, Component: Home},
         { path:'/coverage', Component:Coverage, loader: () => fetch('../../data/warehouses.json')},
         { path: '/sendParcel', element:<PrivateRoute><SendParcelInfo></SendParcelInfo></PrivateRoute>, loader: ()=> fetch('../../data/warehouses.json')},
-        { path: '/berider', element: <BeARider></BeARider>}
+        { path: '/berider', element: <PrivateRoute><BeARider></BeARider></PrivateRoute>, loader: ()=> fetch('../../data/warehouses.json')}
     ]
   },
   {

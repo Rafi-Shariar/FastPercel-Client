@@ -1,19 +1,53 @@
 import React from "react";
 import IMG from "../../assets/agent-pending.png";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
+import { useLoaderData } from "react-router";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
+import toast, { Toaster } from "react-hot-toast";
 const BeARider = () => {
+  const axiosSecure = useAxiosSecure();
+  const user = useAuth();
+  console.log(user);
+  
+
   //React Hook Form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, control } = useForm();
+
+  const serviceCenters = useLoaderData();
+  const regionDuplicate = serviceCenters.map((c) => c.region);
+  const regions = [...new Set(regionDuplicate)];
+
+  const riderRegion = useWatch({ control, name: "region" });
+
+  const districtsByRegion = (region) => {
+    const regionDistricts = serviceCenters.filter((c) => c.region === region);
+    const districts = regionDistricts.map((d) => d.district);
+    return districts;
+  };
 
   const onSubmit = (data) => {
-    console.log(data);
+    const ridersInfo = { ...data, status: "Pending" };
+
+    axiosSecure.post("/riders", ridersInfo).then((res) => {
+      if (res.data.insertedId) {
+        toast.success("Request Send Successfully!", {
+          duration: 4000,
+          position: "top-right",
+          style: {
+            background: "#003d32",
+            color: "#fff",
+          },
+        });
+      }
+      else{
+        toast.error("Error Occured! Try again.")
+      }
+    });
   };
   return (
     <div className="bg-white p-12">
+      <Toaster />
       <section className="w-[50%]">
         <h1 className="font-extrabold text-5xl">Be a Rider</h1>
         <p className=" text-base text-gray-500 mt-4">
@@ -23,7 +57,7 @@ const BeARider = () => {
         </p>
       </section>
 
-      <section className="flex gap-6 justify-center">
+      <section className="flex gap-6 justify-between">
         <div className="w-[50%]">
           <h3 className="mt-16 text-3xl font-semibold">
             Tell us about yourself
@@ -31,49 +65,49 @@ const BeARider = () => {
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="mt-16">
-             
-             {/* Top Container */}
+            {/* Top Container */}
             <div className="flex gap-6">
-
               {/* Left Side */}
               <div className="w-[50%]">
-                <label className="flex items-center gap-2 cursor-pointer font-medium">
+                <label className="flex items-center gap-2 cursor-pointer font-medium text-sm">
                   {" "}
                   Your Name{" "}
                 </label>
                 <input
                   {...register("name")}
                   type="text"
-                  placeholder="Rider's Name"
+                  defaultValue={user?.user.displayName}
+                  readOnly
                   className="input input-bordered w-full"
                 />
 
-                <label className="flex items-center gap-2 cursor-pointer font-medium mt-6">
+                <label className="flex items-center gap-2 cursor-pointer font-medium text-sm mt-6">
                   {" "}
                   Your Email{" "}
                 </label>
                 <input
                   {...register("email")}
                   type="text"
-                  placeholder="Rider's Email"
+                  defaultValue={user?.user.email}
+                  readOnly
                   className="input input-bordered w-full"
                 />
 
-                <label className="flex items-center gap-2 cursor-pointer font-medium mt-6">
+                <label className="flex items-center gap-2 cursor-pointer font-medium text-sm mt-6">
                   {" "}
                   NID No{" "}
                 </label>
                 <input
                   {...register("nid_no")}
-                  type="text"
+                  type="number"
                   placeholder="NID no."
                   className="input input-bordered w-full"
                 />
               </div>
 
               {/* Right Side */}
-               <div className="w-[50%]">
-                <label className="flex items-center gap-2 cursor-pointer font-medium">
+              <div className="w-[50%]">
+                <label className="flex items-center gap-2 cursor-pointer font-medium text-sm">
                   {" "}
                   Age{" "}
                 </label>
@@ -84,34 +118,66 @@ const BeARider = () => {
                   className="input input-bordered w-full"
                 />
 
-                <label className="flex items-center gap-2 cursor-pointer font-medium mt-6">
+                <label className="flex items-center gap-2 cursor-pointer font-medium text-sm mt-6">
                   {" "}
                   Your Region{" "}
                 </label>
-                <input
-                  {...register("email")}
-                  type="text"
-                  placeholder="Rider's Email"
-                  className="input input-bordered w-full"
-                />
+                <select
+                  {...register("region")}
+                  placeholder="select region"
+                  className="select select-bordered w-full font-normal"
+                >
+                  {regions.map((r, i) => (
+                    <option key={i} value={r}>
+                      {" "}
+                      {r}
+                    </option>
+                  ))}
+                </select>
 
-                <label className="flex items-center gap-2 cursor-pointer font-medium mt-6">
+                <label className="flex items-center gap-2 cursor-pointer font-medium text-sm mt-6">
                   {" "}
-                  NID No{" "}
+                  Contact No{" "}
                 </label>
                 <input
-                  {...register("nid_no")}
-                  type="text"
-                  placeholder="NID no."
+                  {...register("contact")}
+                  type="contact"
+                  placeholder="Contact no."
                   className="input input-bordered w-full"
                 />
               </div>
             </div>
+
+            {/* Bottom Container */}
+            <div>
+              <label className="flex items-center gap-2 cursor-pointer font-medium text-sm mt-6">
+                {" "}
+                Prefered Warehouse ?{" "}
+              </label>
+              <select
+                {...register("warehouse")}
+                className="select select-bordered w-full font-normal"
+              >
+                {districtsByRegion(riderRegion).map((r, i) => (
+                  <option key={i} value={r}>
+                    {" "}
+                    {r}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              className="btn bg-brand text-black px-12 w-full mt-3"
+            >
+              Confirm Parcel
+            </button>
           </form>
         </div>
 
         {/* Image Container  */}
-        <div className=" bg-amber-100">
+        <div className="">
           <img src={IMG} alt="" />
         </div>
       </section>
